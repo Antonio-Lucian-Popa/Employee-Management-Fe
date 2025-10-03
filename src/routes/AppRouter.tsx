@@ -72,6 +72,7 @@ export function AppRouter() {
           }
         />
         <Route path="/onboarding" element={<Onboarding />} />
+        <Route path="/oauth-success" element={<DashboardPage />} />
         <Route
           path="/register"
           element={

@@ -49,10 +49,10 @@ export function LoginPage() {
   };
 
   const handleGoogleLogin = () => {
-    const googleUrl = import.meta.env.VITE_OAUTH_GOOGLE_URL;
-    if (googleUrl) {
-      window.location.href = googleUrl;
-    }
+    const base = import.meta.env.VITE_OAUTH_GOOGLE_URL; // ex: http://localhost:8080/oauth2/authorization/google
+    const tenant = localStorage.getItem('tenant') || import.meta.env.VITE_TENANT_OVERRIDE;
+    const url = tenant ? `${base}?tenant=${encodeURIComponent(tenant)}` : base;
+    window.location.href = url;
   };
 
   return (
