@@ -82,7 +82,10 @@ export interface Invitation {
   email: string;
   role: UserRole;
   tenantId: string;
-  tenantName: string;
+  acceptedAt: string | null;
+  tenantName: string | null;
+  createdBy: string | null;    // doar id-ul (sau null), nu obiect
+  createdAt: string;
   expiresAt: string;
   invitedBy: User;
 }

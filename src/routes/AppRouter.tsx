@@ -94,11 +94,7 @@ export function AppRouter() {
         <Route
           path="/invite/:token"
           element={
-            <AuthGuard>
-              <AuthLayout>
-                <InvitationPage />
-              </AuthLayout>
-            </AuthGuard>
+            <InvitationPage />
           }
         />
         <Route path="/billing/success" element={<BillingSuccessPage />} />

@@ -96,11 +96,9 @@ export const invitationsApi = {
     apiClient.get<Invitation>(`/api/v1/invitations/${token}`),
 
   accept: (token: string, password: string, firstName: string, lastName: string) =>
-    apiClient.post(`/api/v1/invitations/${token}/accept`, {
-      password,
-      firstName,
-      lastName
-    }),
+    apiClient.post(`/api/v1/invitations/${token}/accept`,
+      null, // fără body
+      { params: { firstName, lastName, password } }),
 };
 
 export const billingApi = {
