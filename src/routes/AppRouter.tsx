@@ -22,6 +22,7 @@ import { BillingCancelPage } from '@/pages/BillingCancelPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { UnauthorizedPage } from '@/pages/UnauthorizedPage';
 import { FullPageLoader } from '@/components/Loader';
+import Onboarding from '@/pages/Onboarding';
 
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuthStore();
@@ -70,6 +71,7 @@ export function AppRouter() {
             </AuthGuard>
           }
         />
+        <Route path="/onboarding" element={<Onboarding />} />
         <Route
           path="/register"
           element={
