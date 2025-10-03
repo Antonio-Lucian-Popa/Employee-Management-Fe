@@ -5,7 +5,8 @@ import type {
   Attendance,
   Leave,
   MonthlyReport,
-  Invitation
+  Invitation,
+  OnboardingResult 
 } from '@/types';
 
 export const authApi = {
@@ -29,6 +30,18 @@ export const authApi = {
 
   logout: () =>
     apiClient.post('/api/v1/auth/logout'),
+};
+
+export const onboardingApi = {
+  completeOwner: (t: string, companyName: string, slug: string) =>
+    apiClient.post<OnboardingResult>('/api/v1/auth/google/complete-owner', {
+      token: t, companyName, slug,
+    }),
+
+  completeInvite: (t: string, invitationToken: string) =>
+    apiClient.post<OnboardingResult>('/api/v1/auth/google/complete-invite', {
+      token: t, invitationToken,
+    }),
 };
 
 export const usersApi = {

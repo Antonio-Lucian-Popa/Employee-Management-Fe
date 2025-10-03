@@ -15,6 +15,13 @@ export interface User {
   avatarUrl?: string;
 }
 
+export interface OnboardingResult {
+  userId: string;
+  tenant: string;
+  role: string;
+  // serverul poate trimite și setCookies pentru dev; nu e necesar aici
+};
+
 export interface AuthResponse {
   user: User;
   accessToken: string;

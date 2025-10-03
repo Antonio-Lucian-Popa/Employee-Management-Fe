@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { motion } from "framer-motion";
 import { Loader2, Building2, UserPlus2, ShieldCheck, MailCheck, ArrowRight, ExternalLink } from "lucide-react";
 
@@ -12,11 +11,9 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
+import { onboardingApi } from "@/api/endpoints";
+import { apiClient } from "@/api/axios";
 
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
-  withCredentials: true, // IMPORTANT pentru cookies HttpOnly
-});
 
 function slugify(src: string) {
   return src
@@ -54,32 +51,32 @@ export default function Onboarding() {
   const slugValid = useMemo(() => /^[a-z0-9-]{3,30}$/.test(slug), [slug]);
 
   async function completeOwner() {
-    try {
-      setLoading(true); setErr(null);
-      const { data } = await api.post("/api/v1/auth/google/complete-owner", { token: t, companyName, slug });
-      if (data?.tenant) {
-        localStorage.setItem("tenant", data.tenant);
-        api.defaults.headers.common["X-Tenant"] = data.tenant;
-      }
-      nav("/dashboard");
-    } catch (e: any) {
-      setErr(e?.response?.data || "Eroare la creare companie");
-    } finally { setLoading(false); }
-  }
+  try {
+    setLoading(true); setErr(null);
+    const { data } = await onboardingApi.completeOwner(t, companyName, slug);
+    if (data?.tenant) {
+      localStorage.setItem('tenant', data.tenant);
+      apiClient.defaults.headers.common['X-Tenant'] = data.tenant;
+    }
+    nav('/dashboard');
+  } catch (e: any) {
+    setErr(e?.response?.data || 'Eroare la creare companie');
+  } finally { setLoading(false); }
+}
 
-  async function completeInvite() {
-    try {
-      setLoading(true); setErr(null);
-      const { data } = await api.post("/api/v1/auth/google/complete-invite", { token: t, invitationToken });
-      if (data?.tenant) {
-        localStorage.setItem("tenant", data.tenant);
-        api.defaults.headers.common["X-Tenant"] = data.tenant;
-      }
-      nav("/dashboard");
-    } catch (e: any) {
-      setErr(e?.response?.data || "Eroare la acceptare invitație");
-    } finally { setLoading(false); }
-  }
+async function completeInvite() {
+  try {
+    setLoading(true); setErr(null);
+    const { data } = await onboardingApi.completeInvite(t, invitationToken);
+    if (data?.tenant) {
+      localStorage.setItem('tenant', data.tenant);
+      apiClient.defaults.headers.common['X-Tenant'] = data.tenant;
+    }
+    nav('/dashboard');
+  } catch (e: any) {
+    setErr(e?.response?.data || 'Eroare la acceptare invitație');
+  } finally { setLoading(false); }
+}
 
   return (
     <div className="min-h-[100dvh] bg-gradient-to-b from-background via-background to-muted">
