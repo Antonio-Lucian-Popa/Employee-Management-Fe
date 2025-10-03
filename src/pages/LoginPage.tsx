@@ -34,15 +34,21 @@ export function LoginPage() {
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     try {
-      const response = await authApi.login(data.email, data.password);
-      const { user, accessToken } = response.data;
+      // 1) login -> primești TokenResponse
+      const { data: tokens } = await authApi.login(data.email, data.password);
 
-      localStorage.setItem('accessToken', accessToken);
-      setUser(user);
+      // dacă folosești încă header Bearer:
+      localStorage.setItem('accessToken', tokens.accessToken);
+
+      // 2) ia userul real
+      const { data: me } = await authApi.me();
+
+      // 3) populați store-ul -> ProtectedRoute te lasă să intri
+      setUser(me);
       toast.success('Logged in successfully');
       navigate('/dashboard');
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Login failed');
+      toast.error(error?.response?.data?.message || 'Login failed');
     } finally {
       setIsLoading(false);
     }
